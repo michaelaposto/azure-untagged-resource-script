@@ -6,7 +6,7 @@ $resources = Get-AzResource | Where-Object {$null -eq $_.Tags -or $_.Tags.Count 
 # Create results array which stores the untagged resources to be used in weekly email
 $results = @()
 
-# Loop to list the the untagged resources, resource type and the resource group
+# Loop to store the the untagged resources, resource type and the resource group in the results array
 foreach ($resource in $resources){
     $results += New-Object PSObject -Property @{
         Name   = $resource.Name
