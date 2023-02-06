@@ -14,3 +14,20 @@ jobs:
       with:
         azcliversion: latest
         args: az cloud-shell run --command "Invoke-WebRequest https://github.com/michaelaposto/azure-untagged-resource-script/blob/main/azure-resource-cleanup.ps1 | Invoke-Expression"
+
+    - name: Send email of script output to Azenix PAYG members
+      uses: actions/email@v1
+      with:
+        subject: Azenix Azure PAYG - Untagged resources 
+        to: michael.aposto26@gmail.com
+        body: |
+          See the following resources that are untagged and either tag or remove them from the subscription. 
+          Regards, 
+          Azenix Team
+
+          Script Output:
+          $(cat azure-resource-cleanup.ps1.output)
+        attachments:
+          - azure-resource-cleanup.ps1.output
+
+          
