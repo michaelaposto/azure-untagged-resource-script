@@ -1,0 +1,36 @@
+name: Run script in Azure Cloud Shell
+
+on: [push]
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Connect to Azure Cloud Shell
+      uses: azure/ssh-action@v1
+      with:
+        host: shell.azure.com
+        username: $AZURE_USERNAME
+        password: $AZURE_PASSWORD
+
+    - name: Run cleanup script in Azure Cloud Shell
+      run: |
+        cd /home/michael/azure-untagged-resource-script
+        bash azure-resource-cleanup.ps1 > output.txt
+
+    - name: Send email with output
+      uses: actions/email@v1
+      with:
+        to: michael.aposto@azenix.com.au
+        subject: Azenix Azure PAYG untagged resources
+        body: |
+          The following resources are untagged. If they belong to you please tag or delete them. 
+          
+          Regards,
+          Azenix Cleanup Team
+
+          $(cat output.txt)
