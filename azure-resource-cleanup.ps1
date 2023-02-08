@@ -24,7 +24,7 @@ $results | Export-Csv -Path "UntaggedResources.csv" -NoTypeInformation
 # Beginning of html email script segment
 
 $smtp = "smtp.azenix.com.au"
-$emailFrom = "Azure Cleanup Team"
+$emailFrom = "michael.aposto@azenix.com.au"
 $emailTo = "michael.aposto@azenix.com.au"
 $subject = "Azure PAYG resource cleanup - Untagged resources"
 
