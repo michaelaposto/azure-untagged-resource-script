@@ -17,18 +17,3 @@ jobs:
         AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
         AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-    - name: Send email of script output to Azenix PAYG members
-      env: 
-        EMAIL_SECRET: ${{ secrets.EMAIL_SECRET }}
-      uses: actions/email.py
-      with:
-        subject: Azenix Azure PAYG - Untagged resources 
-        to: michael.aposto@azenix.com.au
-        body: |
-          The following resources are untagged, please either tag or remove them from the subscription. 
-          Regards, 
-          Azenix Team
-          Script Output:
-          $(cat azure-resource-cleanup.ps1.output)
-        attachments: azure-resource-cleanup.ps1.output
