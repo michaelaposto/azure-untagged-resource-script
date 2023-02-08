@@ -1,36 +1,34 @@
-name: Run script in Azure Cloud Shell
+name: Run Powershell script 'azure-untagged-resource-script' in Azure 
 
 on: [push]
 
 jobs:
-  run_script:
-    runs-on: ubuntu-latest
-
+  run-script:
+    runs-on: windows-latest
+  
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Connect to Azure Cloud Shell
-      uses: azure/ssh-action@v1
-      with:
-        host: shell.azure.com
-        username: $AZURE_USERNAME
-        password: $AZURE_PASSWORD
-
     - name: Run cleanup script in Azure Cloud Shell
       run: |
-        cd /home/michael/azure-untagged-resource-script
-        bash azure-resource-cleanup.ps1 > output.txt
+        az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+        az account set --subscription $AZURE_SUBSCRIPTION_ID
+        az cloud-shell run --shell powershell --command "& './azure-untagged-resource-script/azure-resource-cleanup.ps1'"
+      env:
+        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Send email with output
-      uses: actions/email@v1
+    - name: Send email of script output to Azenix PAYG members
+      env: 
+        EMAIL_SECRET: ${{ secrets.EMAIL_SECRET }}
+      uses: actions/email.py
       with:
+        subject: Azenix Azure PAYG - Untagged resources 
         to: michael.aposto@azenix.com.au
-        subject: Azenix Azure PAYG untagged resources
         body: |
-          The following resources are untagged. If they belong to you please tag or delete them. 
-          
-          Regards,
-          Azenix Cleanup Team
-
-          $(cat output.txt)
+          The following resources are untagged, please either tag or remove them from the subscription. 
+          Regards, 
+          Azenix Team
+          Script Output:
+          $(cat azure-resource-cleanup.ps1.output)
+        attachments: azure-resource-cleanup.ps1.output
