@@ -23,13 +23,22 @@ $results | Export-Csv -Path "UntaggedResources.csv" -NoTypeInformation
 
 # Beginning of html email script segment
 
-$smtp = "smtp.azenix.com.au"
-$emailFrom = "michael.aposto@azenix.com.au"
-$emailTo = "michael.aposto@azenix.com.au"
-$subject = "Azure PAYG resource cleanup - Untagged resources"
+# Gmail and Gmail account to&from
+$SmtpServer = "smtp.gmail.com"
+$SmtpPort = "587"
+$EmailFrom = "michael.aposto26@azenix.com.au"
+$EmailTo = "michael.aposto@azenix.com.au"
 
-# HTML Template
-$emailBody = @"
+# Email Credentials
+$EmailUser = ""
+$EmailPass = "" | ConvertTo-SecureString -AsPlainText -Force
+
+# Email message
+$EmailMessage = New-Object System.Net.Mail.MailMessage($EmailFrom, $EmailTo)
+$EmailMessage.Subject = "Azure PAYG resource cleanup - Untagged resources"
+$EmailMessage.Attachments("./UntaggedResources.csv")
+$EmailMessage.IsBodyHtml = $true
+$EmailMessage.Body = @"
 <!DOCTYPE html>
 <html>
   <head>
@@ -58,13 +67,13 @@ $emailBody = @"
             </td>
         </tr>
         <tr>
-        	<td>
-            	<p style="font-size: 18px; color: #000;">Regards,</p>
+                <td>
+                <p style="font-size: 18px; color: #000;">Regards,</p>
             </td>
         </tr>
     </table>
     
-    <!-- Footer -->
+    <!-- Footer --> 
     <table style="width: 100%; background-color: #333;">
         <tr>
             <td style="padding: 20px; color: #fff;">
@@ -77,8 +86,10 @@ $emailBody = @"
 "@
 
 # Replace ScriptOutput text with untagged script results
- $emailBody = $emailBody.Replace("ScriptOutput", $results)
+$EmailMessage.Body = $EmailMessage.Body.Replace("ScriptOutput", $results)
 
-# Send email
-
-Send-MailMessage -To $emailTo -From $emailFrom -Subject $subject -Body $emailBody -BodyAsHtml -SmtpServer $smtp
+# SMTP client and passing HTML body and credentials into message
+$SmtpClient = New-Object System.Net.Mail.SmtpClient($SmtpServer, $SmtpPort)
+$SmtpClient.EnableSsl = $true
+$SMTPClient.Credentials = New-Object System.Net.NetworkCredential($EmailUser, $EmailPass);
+$SMTPClient.Send($EmailMessage)
