@@ -1,3 +1,8 @@
+param (
+    $EmailUser,
+    $EmailPass
+)
+
 # Script to list untagged resources
 
 # Create resource variable
@@ -30,8 +35,8 @@ $EmailFrom = "michael.aposto26@azenix.com.au"
 $EmailTo = "michael.aposto@azenix.com.au"
 
 # Email Credentials
-$EmailUser = ""
-$EmailPass = "" | ConvertTo-SecureString -AsPlainText -Force
+#$EmailUser = ""
+#$EmailPass = "" | ConvertTo-SecureString -AsPlainText -Force
 
 # Email message
 $EmailMessage = New-Object System.Net.Mail.MailMessage($EmailFrom, $EmailTo)
