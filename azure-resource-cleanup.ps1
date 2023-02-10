@@ -31,7 +31,7 @@ $results | Export-Csv -Path "UntaggedResources.csv" -NoTypeInformation
 # Gmail and Gmail account to&from
 $SmtpServer = "smtp.gmail.com"
 $SmtpPort = "587"
-$EmailFrom = "michael.aposto26@azenix.com.au"
+$EmailFrom = "michael.aposto@azenix.com.au"
 $EmailTo = "michael.aposto@azenix.com.au"
 
 # Email Credentials

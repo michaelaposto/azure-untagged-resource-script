@@ -9,9 +9,9 @@ jobs:
     steps:
     - name: Run cleanup script in Azure Cloud Shell
       run: |
-        az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-        az account set --subscription $AZURE_SUBSCRIPTION_ID
-        az cloud-shell run --shell powershell --command "& './azure-untagged-resource-script/azure-resource-cleanup.ps1'"
+        az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        az cloud-shell run --shell powershell --command "& './azure-untagged-resource-script/azure-resource-cleanup.ps1 -emailAddress ${{ secrets.EmailUser }} -emailPassword ${{ secrets.EmailPass }}'"
       env:
         AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
