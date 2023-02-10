@@ -20,5 +20,5 @@ jobs:
       with:
         azcliversion: 2.30.0
         inlineScript: |
-          $GITHUB_WORKSPACE/azure-resource-cleanup.ps1 -emailAddress ${{ secrets.EmailUser }} -emailPassword ${{ secrets.EmailPass }
+          $GITHUB_WORKSPACE/azure-resource-cleanup.ps1 -emailAddress ${{ secrets.EmailUser }} -emailPassword ${{ secrets.EmailPass }}
 
