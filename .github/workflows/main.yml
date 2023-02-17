@@ -1,3 +1,4 @@
+
 name: Run Powershell script 'azure-untagged-resource-script' in Azure 
 
 on: [push]
@@ -5,19 +6,11 @@ on: [push]
 jobs:
   run-script:
     runs-on: windows-latest
-  
     steps:
-    - name: "Az cli login"
-      uses: azure/login@v1
+    - uses: actions/checkout@v2
+    - uses: azure/login@v1
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Run cleanup script in Azure Cloud Shell
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.30.0
-        inlineScript: |
-          $GITHUB_WORKSPACE/azure-resource-cleanup.ps1 -emailAddress ${{ secrets.EmailUser }} -emailPassword ${{ secrets.EmailPass }}
-
+      run: |
+        $GITHUB_WORKSPACE/azure-resource-cleanup.ps1 -emailAddress ${{ secrets.EMAILUSER}} -emailPassword ${{ secrets.EMAILPASS }}
