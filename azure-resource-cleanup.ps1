@@ -1,6 +1,6 @@
 param (
-    $EmailUser,
-    $EmailPass
+    $EMAILUSER,
+    $EMAILPASS
 )
 
 # Script to list untagged resources
@@ -61,7 +61,6 @@ $EmailMessage.Body = @"
             </td>
         </tr>
     </table>
-
   <!-- Body -->
     <table style="width: 100%; padding: 40px;">
         <tr>
@@ -96,5 +95,5 @@ $EmailMessage.Body = $EmailMessage.Body.Replace("ScriptOutput", $results)
 # SMTP client and passing HTML body and credentials into message
 $SmtpClient = New-Object System.Net.Mail.SmtpClient($SmtpServer, $SmtpPort)
 $SmtpClient.EnableSsl = $true
-$SMTPClient.Credentials = New-Object System.Net.NetworkCredential($EmailUser, $EmailPass);
+$SMTPClient.Credentials = New-Object System.Net.NetworkCredential($EMAILUSER, $EMAILPASS);
 $SMTPClient.Send($EmailMessage)
