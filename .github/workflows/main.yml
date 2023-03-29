@@ -1,5 +1,5 @@
 
-name: Run Powershell script 'azure-untagged-resource-script' in Azure 
+name: Run PS script "azure-untagged-rs-script" in Azure
 
 on: [push]
 
@@ -7,10 +7,13 @@ jobs:
   run-script:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: azure/login@v1
+    - name: Login to Azure
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: Run cleanup script in Azure Cloud Shell
-      run: |
-        $GITHUB_WORKSPACE/azure-resource-cleanup.ps1 -emailAddress ${{ secrets.EMAILUSER}} -emailPassword ${{ secrets.EMAILPASS }}
+        enable-AzPSSession: true
+    - name: Run script
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          ./azure-untagged-resource-script/azure-resource-cleanup.ps1
